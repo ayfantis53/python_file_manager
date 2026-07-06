@@ -1,18 +1,42 @@
+[project]
+name = "file-manager"
+version = "0.1.0"
+description = "A project Managing files."
+readme = "README.md"
+authors = [{ name = "SciTec, Inc.", email = "a.y@gmail.com" }]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+license = {text = "MIT"}
+dependencies = []
+requires-python = ">=3.12"
+
 [build-system]
 requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
-[project]
-name = "your_project_name"
-version = "0.1.0"
-description = "A project utilizing standard Python libraries."
-readme = "README.md"
-requires-python = ">=3.12"
-license = {text = "MIT"}
-dependencies = []
-
-[project.optional-dependencies]
-# List optional test or dev dependencies here (e.g., pytest, ruff)
+[dependency-groups]
+dev = [
+    { include-group = "lint" },
+    { include-group = "test" },
+    { include-group = "type-check" },
+    "pre-commit~=4.0",
+]
+lint = [
+    "ruff~=0.14.5",
+]
 test = [
-    "pytest>=8.0.0",
+    "pytest~=9.0",
+    "pytest-cov~=7.0",
+    "pytest-asyncio~=1.1",
+    "pytest-mock",
+    "pytest-xdist~=3.8.0",
+    "pytest-randomly~=4.0.1",
+]
+type_check = [
+    "mypy ~=1.19.0",
+    "mypy-protobuf~=4.0",
+    "types-PyYAML",
+    "types-requests",
 ]

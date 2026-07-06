@@ -1,6 +1,32 @@
-## File Manager Copy No Protobuf implementation
+# File Manager Copy No Protobuf implementation
 -------------------------------------------------------------------------
-- App copies files from a data directory to a destination (NAS) directory
+
+## Overview
+
+- App copies files from a data directory to a destination directory.
+- Checks if files are out of date in data directory and deletes them if they don't.
+
+
+## Formatting and Linting
+
+### Ruff Linting
+```bash
+# To Check for Errors: Use the ruff check command.
+ruff check .
+
+# To Automatically Fix Errors:
+ruff check --fix .
+
+# To Format Code:
+ruff format .
+
+# To ensure Ruff is reading the correct file and see exactly what settings are being applied:
+ruff config
+```
+
+## Running Code
+
+### Running App Locally
 
 - To run open 2 terminals
     - Run in 1st terminal: $ python server.py
@@ -13,3 +39,12 @@
     - Run in terminal: cd app/      &&     $ _setup.sh  >   clean
 - To build project
     - Run in terminal: $ _setup.sh  >   build
+
+### Running App with Docker
+```bash
+# Build container from image.
+docker build -f docker/Dockerfile -t file_manager:local-build .
+
+# Run container from image.
+docker run --rm -it --entrypoint=bash file_manager:local-build
+```
