@@ -1,2 +1,14 @@
+# Logs
 /logs/
 *.log
+
+# Ruff outputs
+.ruff_cache
+
+# Python build
+venv/
+.pytest*
+.mypy*
+.coverage
+*cache*
+*.egg-info

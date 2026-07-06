@@ -19,6 +19,16 @@ TAG?="local-build"
 # ===========
 
 # --- Utility Targets ---
+
+# linting.
+check:
+	TAG=${TAG} ruff check .
+fix:
+	TAG=${TAG} ruff check --fix .
+lint:
+	TAG=${TAG} ruff format .
+
+# Run App.
 up:
 	TAG=${TAG}
 down:
@@ -38,7 +48,7 @@ build:
 
 # Clean up build artifacts
 clean:
-	rm -rf 
+	rm -rf .ruff_cache
 
 # Self-documenting help target 
 help:

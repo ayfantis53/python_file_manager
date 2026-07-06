@@ -12,13 +12,13 @@
 ### Ruff Linting
 ```bash
 # To Check for Errors: Use the ruff check command.
-ruff check .
+ruff check . ||  make check
 
 # To Automatically Fix Errors:
-ruff check --fix .
+ruff check --fix . ||  make fix
 
 # To Format Code:
-ruff format .
+ruff format . ||  make format
 
 # To ensure Ruff is reading the correct file and see exactly what settings are being applied:
 ruff config
