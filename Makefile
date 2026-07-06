@@ -8,14 +8,14 @@
 #####################################################################
 
 # ===========
-# PROJECT VARIABLES
+# PROJECT VARIABLES.
 # ===========
 
 TAG?="local-build"
 
 
 # ===========
-# TARGETS
+# TARGETS.
 # ===========
 
 # --- Utility Targets ---
@@ -28,15 +28,12 @@ fix:
 format:
 	ruff format .
 
-# testing
+# testing.
 test:
 	uv run pytest
-
 # Run App.
 run:
 	docker run --rm -it --entrypoint=bash file_manager:${TAG}
-down:
-	TAG=${TAG}
 
 # --- Build Targets ---
 build:
@@ -44,19 +41,19 @@ build:
 
 
 # ===========
-# MAINTENANCE
+# MAINTENANCE.
 # ===========
 
-# .PHONY tells Make that 'clean' is not a physical file
+# .PHONY tells Make that 'clean' is not a physical file.
 .PHONY: clean help
 
-# Clean up build artifacts
+# Clean up build artifacts.
 clean:
 	rm -rf .ruff_cache .pytest_cache .venv tests/__pycache__ /src/file_manager.egg-info tests/test_data/ src/__pycache__ src/file_manager.egg-info src/modules/__pycache__
-# Clean up docker
+# Clean up docker.
 clean-docker:
 	docker rmi file_manager:${TAG}
 
-# Self-documenting help target 
+# Self-documenting help target.
 help:
 	@grep -E '^[a-z.A-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'

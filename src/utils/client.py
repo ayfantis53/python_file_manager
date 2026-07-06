@@ -1,8 +1,15 @@
-# IMITATES HSD SENDING MESSAGE
+"""Imitates HSD Sending message."""
+
+# Standard Library Imports
 import socket
 
+
+# ================
+# Global variables.
+# ================
 HOST = "localhost"
 PORT = 8089
+
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((HOST, PORT))

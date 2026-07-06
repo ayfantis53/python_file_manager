@@ -29,11 +29,11 @@ def file_retention_management(index: int, vars: dict, year: int) -> None:
     """
     data_dir = vars.paths[index].get(vars.message_dir)
 
-    # Add _year to directory if needed based on config.
+    # Add "_year" to directory if needed based on config.
     if vars.paths[index].get(vars.year):
         data_dir = str(data_dir) + "_" + str(year)
 
-    # make sure file exists and that it wasnt previously copied in the last run.
+    # File exists and that it wasnt previously copied in the last run.
     if os.path.exists(data_dir):
         leniency_time = vars.paths[index].get("LENIENCY")
 
@@ -52,14 +52,22 @@ def file_retention_management(index: int, vars: dict, year: int) -> None:
 
             # Is the file older than the current time - retention time.
             if retention_time > t_mod:
-                # If it is older try and delete it.
+                # -- Attempt to delete a specific file path from the filesystem --.
                 try:
                     os.remove(m_file)
                     vars.logger.info(
                         "File [" + str(m_file) + "] deleted because it was outdated"
                     )
-                except Exception:
-                    vars.logger.error(Exception)
+                # -- Handles access/manipulating file that does not exist at path --.
+                except FileNotFoundError as err:
+                    vars.logger.error(f"File Not found {err}.")
+                # -- Handles performing an operation on file without access privileges --.
+                except PermissionError:
+                    print("Do NOT have permission to delete this file.")
+                # -- Handles system-related, i.e. Input/Output, missing file, or network/permission error --.
+                except OSError as err:
+                    print(f"A different OS error occurred: {err}.")
+    # File does NOT exist.
     else:
         vars.logger.error(
             "File Manager could not find Directory: [" + str(data_dir) + "]"
@@ -104,10 +112,11 @@ def file_copied_management(
     if os.path.exists(data_dir):
         vars.logger.debug("Data Directory [" + str(data_dir) + "] exists")
 
+        # Destination exists for output directory.
         if os.path.exists(nas_dir):
             vars.logger.debug("Destination Directory [" + str(nas_dir) + "] exists")
+        # Destination does NOT exists for output directory so create it.
         else:
-            # Return 0 for failed.
             os.makedirs(nas_dir)
             vars.logger.error("NAS Directory [" + str(nas_dir) + "] created")
 
@@ -145,11 +154,13 @@ def file_copied_management(
                         "Permission Denied to read File: [" + str(t_file) + "]"
                     )
                     return [last_time, 0]
+    # File does NOT exist.
     else:
         # Return 0 for failed.
         vars.logger.error("[" + str(data_dir) + "] Folder doesnt Exist")
         return [last_time, 0]
 
+    # Files were not copied.
     if not copied:
         # Return 1 for Degraded.
         vars.logger.warning("No New Files to Copy in [" + str(data_dir) + "]")
@@ -167,8 +178,7 @@ def thread_daemon(vars: FileManagerInit, comms: Communications) -> None:
         comms (Communications): Handles recieving and sending messages using ports class object.
     """
     # initialize variables.
-    periodicity = vars.configs.get(vars.FREQ_CHECKS)
-
+    periodicity = vars.configs.get(vars.freq_checks)
     last_time = [0 for i in vars.paths]
     b_status = [False for i in vars.paths]
     status_good = True
@@ -178,8 +188,9 @@ def thread_daemon(vars: FileManagerInit, comms: Communications) -> None:
         last_time[path] = datetime.datetime.min
 
         # Going to be our health variable to send to APP 2 SUCCESS, 1 DEGRADED, 0 FAIL.
-        b_status[path] = vars.GREEN
-
+        b_status[path] = vars.green
+    
+    # Control flow statement used to create an infinite loop.
     while True:
         # Get time to put in logs and save to know what files are new to copy.
         current_time = datetime.datetime.now()
@@ -197,7 +208,7 @@ def thread_daemon(vars: FileManagerInit, comms: Communications) -> None:
         if is_primary:
             # Find out if all directories are red.
             for path in range(len(vars.paths)):
-                if b_status[path] == vars.RED and not status_good:
+                if b_status[path] == vars.red and not status_good:
                     status_good = False
                 else:
                     status_good = True
@@ -205,7 +216,7 @@ def thread_daemon(vars: FileManagerInit, comms: Communications) -> None:
             # If we have at least one non red directory we still run.
             if status_good:
                 for path in range(len(vars.paths)):
-                    # Delete outdated files and copy new ones
+                    # Delete outdated files and copy new ones.
                     file_retention_management(path, vars, current_time.year)
                     last_time[path], b_status[path] = file_copied_management(
                         last_time[path],
@@ -218,18 +229,18 @@ def thread_daemon(vars: FileManagerInit, comms: Communications) -> None:
                 comms.send_proto(b_status, vars)
 
                 # Time to wait until the next loop iteration.
-                time.sleep(periodicity * vars.SECONDS_PER_MIN)
+                time.sleep(periodicity * vars.seconds_per_min)
 
             else:
                 # One or both directories have something wrong with them and check every 10 seconds to see if it should run again.
                 vars.logger.error("APP Status is RED Attempting to rerun!!!")
-                time.sleep(vars.FAILURE_PERIOD_TIME)
+                time.sleep(vars.failure_period_time)
         else:
             # Not Primary so it will check every 10 seconds to see if it should run again.
             vars.logger.debug(
                 "APP IS NOT PRIMARY, AND NOT RUNNING... Listening for isprimary message"
             )
-            time.sleep(vars.FAILURE_PERIOD_TIME)
+            time.sleep(vars.failure_period_time)
 
 
 def main():
@@ -249,7 +260,7 @@ def main():
     # Initialize Modules.
     # ================
 
-    # Modules
+    # Modules.
     comms = Communications(mutex)
     file_manage_init = FileManagerInit(json_file_path)
 
@@ -275,6 +286,7 @@ def main():
         ),
     )
 
+    # flags as a daemon thread, the background process will terminate as soon as all non-daemon threads finish executing.
     t1.daemon = True
     t2.daemon = True
 
@@ -286,10 +298,12 @@ def main():
     # Handle unexpected shutdown.
     # ================
 
-    # Make app get kiled when ctrl - C pressed.
+    # -- Application is running CTRL-C is not pressed --.
     try:
-        while 1:
+        # Control flow statement used to create an infinite loop.
+        while True:
             time.sleep(0.1)
+    # -- Handles when a user manually interrupts a running script --.
     except KeyboardInterrupt:
         print("KeyboardInterrupt")
         sys.exit(1)

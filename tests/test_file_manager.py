@@ -154,9 +154,9 @@ def test_json_setup_config_vars(var1: int, var2: str, var3: int, var4: str):
 
     Args:
          var1 (int): Port number to be tested.
-         var1 (str): Host name to be tested.
-         var1 (int): Frequency checks number to be tested.
-         var1 (str): Logfile path to be tested.
+         var2 (str): Host name to be tested.
+         var3 (int): Frequency checks number to be tested.
+         var4 (str): Logfile path to be tested.
 
     Returns:
         (bool)
@@ -186,9 +186,9 @@ def test_json_setup_path_vars(var1: str, var2: int, var3: str, var4: int):
 
     Args:
          var1 (str): data directory borep path to be tested.
-         var1 (int): Leniency borep number value to be tested.
-         var1 (str): data directory eph path to be tested.
-         var1 (int): Leniency eph number value to be tested.
+         var2 (int): Leniency borep number value to be tested.
+         var3 (str): data directory eph path to be tested.
+         var4 (int): Leniency eph number value to be tested.
 
     Returns:
         (bool)

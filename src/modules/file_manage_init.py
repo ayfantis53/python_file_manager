@@ -23,10 +23,10 @@ class FileManagerInit:
         message_dir (str | Path):  path of message directory.
         year (int):                year of files creations.
         seconds_per_min (int):     Number of seconds in a minute (60).
-        failure_period_time (int):
-        freq_checks (Number):
-        seconds_per_min (int):
-        configs (dict):
+        failure_period_time (int): Time to sleep before running again if is not primary.
+        freq_checks (Number):      How often app will run when it is primary.
+        seconds_per_min (int):     Time to wait until the next loop iteration * by freq_checks.
+        configs (dict):            Data from config variables.
     """
 
     def __init__(self, json_file: Path | str) -> None:
@@ -69,6 +69,8 @@ class FileManagerInit:
         self.port = self.configs.get("PORT")
         self.host = self.configs.get("HOST")
 
+        # Initializes an IPv4 TCP network socket and assigns it to a class instance variable.
+        # Initiates a network connection from a client socket to a remote server.
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port))
 

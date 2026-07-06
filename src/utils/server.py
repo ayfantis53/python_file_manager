@@ -1,5 +1,12 @@
+"""Server for recieving messages."""
+
+# Standard Library Imports
 import socket
 
+
+# ================
+# Global variables.
+# ================
 HOST = "localhost"
 PORT = 9090
 

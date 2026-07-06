@@ -23,30 +23,45 @@ class Communications:
     def rec_proto(self, vars) -> None:
         """Connect to Socket and Receive Protobuf Message."""
 
+        # Initialize new network socket object using IPv4 address family & TCP transport protocol.
+        # Attach a client socket to a specific local IP address and port.
+        # Put socket into a passive state, signal the operating system kernel to queue incoming connection requests.
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TODO: Delete
         client.bind((vars.HOST, 8089))  # TODO: Delete
         client.listen()  # TODO: Delete
 
         # Are we primary? If not we dont run copy.
-        global is_primary
+        global is_primary # TODO: GLobal variables need to be fixed after classes have been broken out.
 
+        # Control flow statement used to create an infinite loop.
         while True:
             # Thread protection.
             self.mutex.acquire()
 
+            # -- Attempt to wait for incoming connection --.
             try:
+                # Wait for incoming connection, when connected, return new socket object.
                 communication_socket, address = client.accept()
                 vars.logger.info("Listening on port: " + str(address))
 
-                # Receive primary message from Application and deserialize
+                # Receive primary message from Application and deserialize.
                 message_isPrimary = communication_socket.recv(1024).decode("utf-8")
 
+                # Is primary.
                 if message_isPrimary == "isprimary":
                     is_primary = True
+                # Is NOT primary.
                 else:
                     is_primary = False
+            # -- Handles remote server or peer forcefully close on an active network connection unexpectedly --.
+            except ConnectionResetError:
+                print("Client closed the connection unexpectedly.")
+            # -- Handles system-related, i.e. Input/Output, missing file, or network/permission error --.
+            except OSError as err:
+                print(f"Socket error occurred: {err}")
+            # -- Guaranteed to run under all circumstances --.
             finally:
-                # thread protection.
+                # Release mutually exclusive lock (mutex) so other waiting threads can access shared resources.
                 self.mutex.release()
 
             vars.logger.info("Connection with " + str(address) + " ended")
@@ -65,16 +80,19 @@ class Communications:
         state = vars.GREEN
         log_state = "GREEN"
 
-        # Health message
+        # Health message.
         for status in range(len(b_status)):
-            if b_status[status] == vars.RED:
-                state = vars.RED
+            # Status is Unhealthy.
+            if b_status[status] == vars.red:
+                state = vars.red
                 log_state = "RED"
                 break
-            elif b_status[status] == vars.YELLOW and state != vars.RED:
-                state = vars.YELLOW
+            # Status is Degraded.
+            elif b_status[status] == vars.yellow and state != vars.red:
+                state = vars.yellow
                 log_state = "YELLOW"
 
+        # Transmit data over a network.
         vars.client.send(log_state.encode("utf-8"))
 
         vars.logger.info(

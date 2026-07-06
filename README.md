@@ -47,17 +47,21 @@ uv run pytest tests/test_file_manager.py::TestJSON::test_json_SUCCESS
 
 ### Running App Locally
 
-- To run open 2 terminals
-    - Run in 1st terminal: $ python server.py
-    - Run in 2nd terminal: cd app/      &&     $ python file_manager.py
-- To run tests 2 terminals
-    - Run in 1st terminal: $ python server.py
-    - Run in 2nd terminal: cd test/      &&     $ python test_file_manager.py
+```bash
+# Run in 1st terminal.
+uv run server.py
 
-- To clean out project
-    - Run in terminal: cd app/      &&     $ _setup.sh  >   clean
-- To build project
-    - Run in terminal: $ _setup.sh  >   build
+# Run in 2nd terminal.
+uv run  src/file_manager.py
+```
+
+```bash
+# Run in 1st terminal.
+uv run server.py
+
+# Run in 2nd terminal.
+uv run src/utils/test_file_manager.py
+```
 
 ### Running App with Docker
 
