@@ -21,7 +21,7 @@ class LogManager:
         """
         self.logfile_destination = logfile_destination
 
-    def log_setup(logfile_destination: Path | str) -> logging.Logger:
+    def log_setup(self, logfile_destination: Path | str) -> logging.Logger:
         """Sets up projects output log file at location provided.
 
         Args:
@@ -31,8 +31,8 @@ class LogManager:
             (object) logging.Logger instance associated with the specified name.
         """
         # Make log file path if it doesnt exist.
-        if not logfile_destination.exists():
-            logfile_destination.mkdir(parents=True, exist_ok=True)
+        if not Path(logfile_destination).exists():
+            Path(logfile_destination).mkdir(parents=True, exist_ok=True)
 
         # Create logfile path destination.
         logging.basicConfig(

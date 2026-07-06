@@ -49,6 +49,7 @@ class FileManagerInit:
         self.log_file = "LOGFILE_PATH"
         self.message_dir = "DATA_DIR"
         self.year = "YEAR"
+        self.json_file = json_file
 
         # Leniency variables
         self.seconds_per_min = 60
@@ -56,11 +57,11 @@ class FileManagerInit:
         self.freq_checks = "FREQUENCY_CHECKS"
 
         # config data.
-        self.configs = self.json_parse(self.CONFIG, json_file)
-        self.paths = self.json_parse(self.DATA_DIR, json_file)
+        self.configs = self.json_parse(self.conf)
+        self.paths = self.json_parse(self.data_dir)
 
         # get logfile configured.
-        self.logfile_txt = self.configs.get(self.LOGFILE)
+        self.logfile_txt = self.configs.get(self.log_file)
         self.log_manager = LogManager(self.logfile_txt)
         self.logger = self.log_manager.log_setup(self.logfile_txt)
 
@@ -71,18 +72,18 @@ class FileManagerInit:
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((self.host, self.port))
 
-    def json_parse(config_var: dict, json_file: Path | str) -> dict:
+    def json_parse(self, config_var: str) -> dict:
         """Read all the values from the json config file to use in app.
 
         Args:
-            config_var (dict): Python object of all values from config variables.
+            config_var (dict): Key of values from config variables.
             json_file (Path | str): file path json will be read from.
 
         Returns:
             (dict)  of all values from config variables.
         """
         # Open and read JSON file.
-        with open(json_file, "r") as config_file_path:
+        with open(self.json_file, "r") as config_file_path:
             data = config_file_path.read()
 
             # load data into python dictionary.

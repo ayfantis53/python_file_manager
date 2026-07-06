@@ -6,7 +6,7 @@
 .ruff_cache
 
 # Python build
-venv/
+.venv/
 .pytest*
 .mypy*
 .coverage

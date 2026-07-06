@@ -24,6 +24,7 @@ ruff format . ||  make format
 ruff config
 ```
 
+
 ## Running Code
 
 ### Running App Locally
@@ -41,10 +42,28 @@ ruff config
     - Run in terminal: $ _setup.sh  >   build
 
 ### Running App with Docker
+
 ```bash
 # Build container from image.
 docker build -f docker/Dockerfile -t file_manager:local-build .
 
 # Run container from image.
 docker run --rm -it --entrypoint=bash file_manager:local-build
+```
+
+
+## Running Unit Tests
+
+```bash
+# Run all tests:
+uv run pytest
+
+# Run single test file:
+uv run pytest tests/test_file_manager.py
+
+# Run single test suite:
+uv run pytest tests/test_file_manager.py::TestJSON
+
+# Run single test:
+uv run pytest tests/test_file_manager.py::TestJSON::test_json_SUCCESS
 ```

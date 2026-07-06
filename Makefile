@@ -22,11 +22,15 @@ TAG?="local-build"
 
 # linting.
 check:
-	TAG=${TAG} ruff check .
+	ruff check .
 fix:
-	TAG=${TAG} ruff check --fix .
-lint:
-	TAG=${TAG} ruff format .
+	ruff check --fix .
+format:
+	ruff format .
+
+# testing
+test:
+	uv run pytest
 
 # Run App.
 up:
@@ -48,7 +52,7 @@ build:
 
 # Clean up build artifacts
 clean:
-	rm -rf .ruff_cache
+	rm -rf .ruff_cache python_file_manager/.pytest_cache python_file_manager/.venv python_file_manager/tests/__pycache__ python_file_manager/src/file_manager.egg-info
 
 # Self-documenting help target 
 help:

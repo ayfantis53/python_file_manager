@@ -239,7 +239,7 @@ def main():
     # ================
 
     # File paths.
-    json_file_path = "../test/test_configs/file_manager.conf"
+    json_file_path = "../conf/file_manager.conf"
 
     # Set the json file in command line args.
     if len(sys.argv) > 1:
@@ -296,5 +296,7 @@ def main():
 
 
 if __name__ == "__main__":
-    """checks if script is being run directly by the user or imported as a module by another script."""
+    """ Ensure this code only runs if the script is executed.
+    Not when it's imported as a module by another file.
+    """
     main()
