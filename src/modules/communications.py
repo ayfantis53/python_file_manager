@@ -29,7 +29,7 @@ class Communications:
         # Attach a client socket to a specific local IP address and port.
         # Put socket into a passive state, signal the operating system kernel to queue incoming connection requests.
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TODO: Delete
-        client.bind((vars.HOST, 8089))  # TODO: Delete
+        client.bind((vars.host, 8089))  # TODO: Delete
         client.listen()  # TODO: Delete
 
         # Control flow statement used to create an infinite loop.
@@ -53,6 +53,7 @@ class Communications:
                 # Is NOT primary.
                 else:
                     self.is_primary = False
+                    vars.logger.warning("is NO longer primary.")
             # -- Handles remote server or peer forcefully close on an active network connection unexpectedly --.
             except ConnectionResetError:
                 print("Client closed the connection unexpectedly.")
@@ -74,10 +75,10 @@ class Communications:
             b_status (list[bool]): List of the health of all files.
             vars (dict):           Data from config file.
         """
-        vars.logger.info("Connected to port " + str(vars.PORT))
+        vars.logger.info("Connected to port " + str(vars.port))
 
         # Initialize Health message.
-        state = vars.GREEN
+        state = vars.green
         log_state = "GREEN"
 
         # Health message.

@@ -1,12 +1,12 @@
 """Copies files from one file to another based on send flag."""
 
 # Standard lib imports
-import os
-import sys
-import glob
-import time
-import shutil
 import datetime
+import glob
+import os
+import shutil
+import sys
+import time
 from threading import Thread, Lock
 
 # Local imports
@@ -250,7 +250,7 @@ def main():
     # ================
 
     # File paths.
-    json_file_path = "../conf/file_manager.conf"
+    json_file_path = "./conf/file_manager.conf"
 
     # Set the json file in command line args.
     if len(sys.argv) > 1:
@@ -263,13 +263,6 @@ def main():
     # Modules.
     comms = Communications(mutex)
     file_manage_init = FileManagerInit(json_file_path)
-
-    # ================
-    # Set is primary controller.
-    # ================
-
-    # APP message will say if it is primary and this value will be updated.
-    comms.is_primary = True
 
     # ================
     # Manage Threads.

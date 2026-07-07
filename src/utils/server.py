@@ -18,12 +18,12 @@ server.listen()
 communication_socket, address = server.accept()
 
 while True:
-    print(f"Connected to {address}")
+    print(f"Server Connected to {address}")
 
     message = communication_socket.recv(1024).decode("utf-8")
     print(f"Message from client is {message}")
 
     communication_socket.send("HSD Got your message! Thank you".encode("utf-8"))
-    print(f"Communcation with {address} ended!")
+    print(f"Communication with {address} ended!")
 
     # communication_socket.close()

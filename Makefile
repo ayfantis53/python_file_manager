@@ -12,6 +12,7 @@
 # ===========
 
 TAG?="local-build"
+PRIM="true"
 
 # --- Setup OS ---
 
@@ -39,17 +40,23 @@ format:
 	${OS_PRE}ruff format .
 
 # testing.
+app:
+	${OS_PRE}uv run src/file_manager.py
+client:
+	${OS_PRE}uv run src/utils/client.py $(PRIM)
 server:
 	${OS_PRE}uv run src/utils/server.py
 test:
 	${OS_PRE}uv run pytest
-# Run App.
-run:
-	docker run --rm -it --entrypoint=bash file_manager:${TAG}
 
-# --- Build Targets ---
+
+# --- Build Docker ---
+# Build Docker Image.
 build:
 	docker build -f docker/Dockerfile -t file_manager:${TAG} .
+# Run Docker Image.
+run:
+	docker run --rm -it --entrypoint=bash file_manager:${TAG}
 
 
 # ===========
@@ -61,7 +68,7 @@ build:
 
 # Clean up build artifacts.
 clean:
-	rm -rf .ruff_cache .pytest_cache .venv tests/__pycache__ /src/file_manager.egg-info tests/test_data/ src/__pycache__ src/file_manager.egg-info src/modules/__pycache__ && clear
+	rm -rf .ruff_cache .pytest_cache .venv tests/__pycache__ /src/file_manager.egg-info tests/test_data/ src/__pycache__ src/file_manager.egg-info src/modules/__pycache__ **log* && clear
 # Clean up docker.
 clean-docker:
 	docker rmi file_manager:${TAG}
