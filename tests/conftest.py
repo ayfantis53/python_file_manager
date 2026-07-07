@@ -13,6 +13,7 @@ import pytest
 
 # Local imports
 from src.file_manager import file_copied_management
+from src.modules.file_manage_init import FileManagerInit
 
 
 # ================
@@ -25,7 +26,7 @@ def test_json_setup_config_vars(
     var_2: str,
     var_3: int,
     var_4: str,
-    file_manager_init,
+    file_manager_init: FileManagerInit,
 ) -> bool:
     """Make sure config variables have correct values.
 
@@ -41,6 +42,7 @@ def test_json_setup_config_vars(
             True:  Variables are equal and correct.
             False: Variables are NOT equal and incorrect.
     """
+    # Initialize variables.
     config_variables = file_manager_init.json_parse(config_var="CONFIG_VARS")
 
     config_port = config_variables.get("PORT")
@@ -48,6 +50,7 @@ def test_json_setup_config_vars(
     config_freq = config_variables.get("FREQUENCY_CHECKS")
     config_logs = config_variables.get("LOGFILE_PATH")
 
+    # All variables are correct.
     if (
         config_port == var_1
         and config_host == var_2
@@ -55,6 +58,7 @@ def test_json_setup_config_vars(
         and config_logs == var_4
     ):
         return True
+    # Variables are NOT correct.
     else:
         return False
 
@@ -64,9 +68,9 @@ def test_json_setup_path_vars(
     var_2: int,
     var_3: str,
     var_4: int,
-    file_manager_init,
+    file_manager_init: FileManagerInit,
 ) -> bool:
-    """Make sure config variables have correct values.
+    """Make sure json path variables have correct values.
 
     Args:
          var_1 (str):                data directory borep path to be tested.
@@ -80,20 +84,23 @@ def test_json_setup_path_vars(
             True:  Variables are equal and correct.
             False: Variables are NOT equal and incorrect.
     """
+    # Initialize variables.
     config_paths = file_manager_init.json_parse("DATA_PATHS")
 
-    config_bore = config_paths[0].get("DATA_DIR")
-    config_lenb = config_paths[0].get("LENIENCY")
-    config_ephe = config_paths[1].get("DATA_DIR")
-    config_lene = config_paths[1].get("LENIENCY")
+    conf_data_first = config_paths[0].get("DATA_DIR")
+    conf_leniency_first = config_paths[0].get("LENIENCY")
+    conf_data_next = config_paths[1].get("DATA_DIR")
+    conf_leniency_next = config_paths[1].get("LENIENCY")
 
+    # All variables are correct.
     if (
-        config_bore == var_1
-        and config_lenb == var_2
-        and config_ephe == var_3
-        and config_lene == var_4
+        conf_data_first == var_1
+        and conf_leniency_first == var_2
+        and conf_data_next == var_3
+        and conf_leniency_next == var_4
     ):
         return True
+    # Variables are NOT correct.
     else:
         return False
 
@@ -104,21 +111,21 @@ def test_json_setup_path_vars(
 
 
 def test_file_copied_management(
-    data_dir,
-    dir,
-    last_time,
-    index,
-    year,
-    file_manager_init,
+    data_dir: str,
+    dir: str,
+    last_time: int,
+    index: int,
+    year: int,
+    file_manager_init: FileManagerInit,
 ) -> bool:
     """Check if after copy both directories have same number of files in them.
 
     Args:
-        data_dir (str):
-        dir (str):
+        data_dir (str):             Directory where files will be copied fromto be tested against.
+        dir (str):                  Directory where files will be copied from to be tested.
         last_time (int):
-        index (int):
-        year (int):
+        index (int):                Data_path index whether it be data_first or data_second.
+        year (int):                 Current year.
         file_manager_init (object): Class to setup file_manager.
 
     Returns:
@@ -126,8 +133,8 @@ def test_file_copied_management(
             True:  Folders had the same amount of files after copy.
             False: Folders did NOT have the same amount of files after copy.
     """
+    # Initialize variables.
     data = file_manager_init.json_parse("DATA_PATHS")
-
     dest_dir = data[index].get("DEST_DIR")
     eph_data = data[1].get(data_dir)
 
@@ -142,11 +149,14 @@ def test_file_copied_management(
     # Compare both directories.
     comparison = filecmp.dircmp(dir, dest_dir)
 
+    # merges elements into single string, placing a comma separator between each element.
     left_only_files = ",".join(comparison.left_only)
     right_only_files = ",".join(comparison.right_only)
 
+    # Same amount of files in data and destination directories.
     if left_only_files == right_only_files:
         return True
+    # Different amount of files in data and destination directories.
     else:
         return False
 
@@ -158,9 +168,10 @@ def test_data_create(data_dir: str, max: int) -> None:
         dir (str): Path to data directory.
         max (int): Number of test files to make in the directory
     """
-    # Create the directory and any missing parent directories
+    # Create the directory and any missing parent directories.
     Path(data_dir).mkdir(parents=True, exist_ok=True)
 
+    # Create the amount of files as given in arguments.
     for item in range(0, max):
         f = open(data_dir + "/" + "item_" + str(item), "w")
         f.close()
@@ -171,11 +182,14 @@ def test_data_create(data_dir: str, max: int) -> None:
 # ================
 
 
-def test_file_retention_management(dir_index, file_manager_init) -> bool:
+def test_file_retention_management(
+    dir_index: int,
+    file_manager_init: FileManagerInit,
+) -> bool:
     """Test we are deleting outdated index 0 or 1 files correctly.
 
     Args:
-        index (int):                Data directory we check for expired files in (0: borep, 1: eph).
+        dir_index (int):            Data directory we check for expired files in (0: borep, 1: eph).
         file_manager_init (object): Class to setup file_manager.
 
     Returns:
@@ -183,21 +197,25 @@ def test_file_retention_management(dir_index, file_manager_init) -> bool:
             True:  No expired files were found in data dir.
             False: Expired files were found in data dir.
     """
+    # Initialize variables.
     config_paths = file_manager_init.json_parse("DATA_PATHS")
-
     data_dir = config_paths[dir_index].get("DATA_DIR")
     leniency_time = config_paths[dir_index].get("LENIENCY")
 
+    # Initialize time.
     current_time = datetime.datetime.now()
     retention_time = current_time - datetime.timedelta(minutes=leniency_time)
 
+    # Retrieves a list of all file and folder paths located directly inside the data_dir directory.
     msgfiles = os.path.join(data_dir, "*")
     l_msgfiles = glob.glob(msgfiles)
 
+    # Iterate files, get the raw Unix timestamp & convert POSIX/Unix timestamp to human readable.
     for m_file in l_msgfiles:
         t_mod = os.path.getmtime(m_file)
         t_mod = datetime.datetime.fromtimestamp(t_mod)
 
+        # Retention time is greater than time modified.
         if retention_time > t_mod:
             return False
 

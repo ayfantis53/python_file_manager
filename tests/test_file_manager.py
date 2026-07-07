@@ -38,6 +38,7 @@ class TestJSON(unittest.TestCase):
         """Test that our config variables are being read correctly."""
         print("TESTED JSON CORRECT VALUES")
 
+        # Make sure config variables have correct values.
         result_1 = self.test_json_setup_config_vars(
             9090,
             "localhost",
@@ -45,6 +46,7 @@ class TestJSON(unittest.TestCase):
             "../test/logs/",
             FILE_MANAGER_INIT,
         )
+        # Make sure json path variables have correct values.
         result_2 = self.test_json_setup_path_vars(
             "./test/test_data/Data_first",
             1,
@@ -59,12 +61,14 @@ class TestJSON(unittest.TestCase):
         else:
             result = True
 
+        # Check if test passed.
         self.assertEqual(result, True)
 
     def test_json_FAIL(self):
         """Test that our config variables recognize incorrect values."""
         print("TESTED JSON NOT-CORRECT VALUES")
 
+        # Make sure config variables have correct values.
         result_1 = self.test_json_setup_config_vars(
             8080,
             "lochost",
@@ -72,6 +76,7 @@ class TestJSON(unittest.TestCase):
             "./test/logs/",
             FILE_MANAGER_INIT,
         )
+        # Make sure json path variables have correct values.
         result_2 = self.test_json_setup_path_vars(
             "./test/test_data/Data_repars",
             12,
@@ -86,6 +91,7 @@ class TestJSON(unittest.TestCase):
         else:
             result = True
 
+        # Check if test passed.
         self.assertEqual(result, True)
 
 
@@ -94,35 +100,44 @@ class TestCopy(unittest.TestCase):
     """Using Python's built-in unittest library, using subclass unittest.TestCase
     test methods are defined that start with the prefix test. Test we copy files correctly."""
 
-    def test_borep(self):
+    def test_first_data(self):
         """Test all borep files were copied correctly."""
         print("TESTED BOREP COPY FUNCTIONALITY")
+        
+        # Setup time.
         current_time = datetime.now()
+        last_time_first = datetime.min
 
-        last_time_bore = datetime.min
+        # Create directories with test files to copy.
         self.test_data_create("./tests/test_data/Data_first", 3)
         self.test_data_create("./tests/test_data/Dest_first", 0)
 
+        # Check if after copy both directories have same number of files in them.
         result = self.test_file_copied_management(
             "DATA_DIR",
             "./tests/test_data/Data_first",
-            last_time_bore,
+            last_time_first,
             0,
             current_time.year,
             FILE_MANAGER_INIT,
         )
 
+        # Check if test passed.
         self.assertEqual(result, True)
 
-    def test_eph(self):
+    def test_next_data(self):
         """Test all ep files were copied correctly."""
         print("TESTED EP COPY FUNCTIONALITY")
-        current_time = datetime.now()
 
+        # Setup time.
+        current_time = datetime.now()
         last_time_eph = datetime.min
+        
+        # Create directories with test files to copy.
         self.test_data_create("./tests/test_data/Data_next_2026", 3)
         self.test_data_create("./tests/test_data/Dest_next_2026", 0)
 
+        # Check if after copy both directories have same number of files in them.
         result = self.test_file_copied_management(
             "DATA_DIR",
             "./tests/test_data/Data_next_2026",
@@ -132,6 +147,7 @@ class TestCopy(unittest.TestCase):
             FILE_MANAGER_INIT,
         )
 
+        # Check if test passed.
         self.assertEqual(result, True)
 
 
@@ -140,26 +156,36 @@ class TestRetention(unittest.TestCase):
     """Using Python's built-in unittest library, using subclass unittest.TestCase
     test methods are defined that start with the prefix test. Test we delete files correctly."""
 
-    def test_borep_retention(self):
+    def test_first_retention(self):
         """Test we are deleting outdated borep files correctly."""
         print("TESTED BOREP RETENTION FUNCTIONALITY")
+        
+        # Setup time.
         current_time = datetime.now()
 
+        # Call function from file_manager.py Delete files that are past leniency times.
         file_retention_management(0, FILE_MANAGER_INIT, current_time.year)
 
+        # Test we are deleting outdated index 0 (first) files correctly.
         result = self.test_file_retention_management(0, FILE_MANAGER_INIT)
 
+        # Check if test passed.
         self.assertEqual(result, True)
 
-    def test_eph_retention(self):
+    def test_next_retention(self):
         """Test we are deleting outdated ep files correctly."""
         print("TESTED EP RETENTION FUNCTIONALITY")
+
+        # Setup time.
         current_time = datetime.now()
 
+        # Call function from file_manager.py Delete files that are past leniency times.
         file_retention_management(1, FILE_MANAGER_INIT, current_time.year)
 
+        # Test we are deleting outdated index 1 (next) files correctly.
         result = self.test_file_retention_management(1, FILE_MANAGER_INIT)
 
+        # Check if test passed.
         self.assertEqual(result, True)
 
 
