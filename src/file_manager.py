@@ -71,7 +71,7 @@ def file_retention_management(index: int, vars: dict, year: int) -> None:
     # File does NOT exist.
     else:
         vars.logger.error(
-            "File Manager could not find Directory: \"" + str(data_dir) + "\""
+            'File Manager could not find Directory: "' + str(data_dir) + '"'
         )
 
 
@@ -153,7 +153,7 @@ def file_copied_management(
     # Folder does NOT exist.
     else:
         # Return 0 for failed.
-        vars.logger.error("Data Directory \"" + str(data_dir) + "\" does NOT Exist")
+        vars.logger.error('Data Directory "' + str(data_dir) + '" does NOT Exist')
         return [last_time, 0]
 
     # Files were not copied.
