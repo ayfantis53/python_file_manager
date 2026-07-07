@@ -13,6 +13,8 @@
 
 TAG?="local-build"
 PRIM="true"
+JSON=./conf/file_manager.conf
+COMM=PORT
 
 # --- Setup OS ---
 
@@ -41,7 +43,7 @@ format:
 
 # testing.
 app:
-	${OS_PRE}uv run src/file_manager.py
+	${OS_PRE}uv run src/file_manager.py --json-file $(JSON) --comms $(COMM)
 client:
 	${OS_PRE}uv run src/utils/client.py $(PRIM)
 server:

@@ -12,6 +12,7 @@ from threading import Thread, Lock
 # Local imports
 from modules.communications import Communications
 from modules.file_manage_init import FileManagerInit
+from modules.parse_args import parse_args
 
 
 # initializes a mutual exclusion lock (mutex),
@@ -70,7 +71,7 @@ def file_retention_management(index: int, vars: dict, year: int) -> None:
     # File does NOT exist.
     else:
         vars.logger.error(
-            "File Manager could not find Directory: [" + str(data_dir) + "]"
+            "File Manager could not find Directory: \"" + str(data_dir) + "\""
         )
 
 
@@ -152,7 +153,7 @@ def file_copied_management(
     # Folder does NOT exist.
     else:
         # Return 0 for failed.
-        vars.logger.error("Data Directory [" + str(data_dir) + "] does NOT Exist")
+        vars.logger.error("Data Directory \"" + str(data_dir) + "\" does NOT Exist")
         return [last_time, 0]
 
     # Files were not copied.
@@ -241,15 +242,25 @@ def thread_daemon(vars: FileManagerInit, comms: Communications) -> None:
 def main():
     """Main Function runs main and communication thread."""
     # ================
-    # Setup config file.
+    # Initialize.
     # ================
 
+    # comms_type="PORT"
     # File paths.
     json_file_path = "./conf/file_manager.conf"
 
+    # ================
+    # CLI args.
+    # ================
+
+    # Get arguments from command line.
+    args = parse_args(sys.argv[1:])
+
     # Set the json file in command line args.
-    if len(sys.argv) > 1:
-        json_file_path = sys.argv[1]
+    if args.json_file:
+        json_file_path = args.json_file
+    # if args.comms:
+    #     comms_type = args.comms
 
     # ================
     # Initialize Modules.

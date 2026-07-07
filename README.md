@@ -79,8 +79,8 @@ make test
 # Run in 1st terminal.             (Windows)
 uv run src/utils/server.py     ||  python -m  uv run src/utils/server.py    || make server
 
-# Run in 2nd terminal.
-uv run src/file_manager.py     ||  python -m  uv run src/file_manager.py    || make app
+# Run in 2nd terminal.                                                                          (If using Protobuf)
+uv run src/file_manager.py     ||  python -m  uv run src/file_manager.py    || make app     ||  make app COMM=PROTO
 
 # Run in 3rd terminal change "isprimary".
 uv run src/utils/client.py     ||  python -m  uv run src/utils/client.py    || make client PRIM=True

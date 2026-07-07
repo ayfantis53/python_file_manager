@@ -35,23 +35,23 @@ class FileManagerInit:
         Args:
             json_file (Path | str): file path json will be read from.
         """
-        # Health variables
+        # Health variables.
         self.red = 0
         self.yellow = 1
         self.green = 2
 
-        # Sections
+        # Sections.
         self.data_dir = "DATA_PATHS"
         self.conf = "CONFIG_VARS"
 
-        # Config variables
+        # Config variables.
         self.dest_dir = "DEST_DIR"
         self.log_file = "LOGFILE_PATH"
         self.message_dir = "DATA_DIR"
         self.year = "YEAR"
         self.json_file = json_file
 
-        # Leniency variables
+        # Leniency variables.
         self.seconds_per_min = 60
         self.failure_period_time = 10
         self.freq_checks = "FREQUENCY_CHECKS"

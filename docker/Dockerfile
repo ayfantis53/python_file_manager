@@ -63,19 +63,20 @@ COPY pyproject.toml uv.lock Makefile /opt/app/
 
 # Install behave compiler and development libraries.
 RUN dnf install -v --setopt=install_weak_deps=False -y --nogpgcheck \
-        # git \
-        # git-lfs \
         make \
         python${PYTHON_VERSION} \
         python${PYTHON_VERSION}-devel \
         python${PYTHON_VERSION}-pip \
+        protobuf \
+        protobuf-compiler \
+        gcc-c++ \
     # Cleanup.
     && dnf -q clean all \
     && rm -rf /var/cache/dnf/* \
     && rm /etc/yum.repos.d/*
 
 # Install uv.
-RUN pip install --upgrade pip \
+RUN pip install --upgrade pip && pip install protobuf \
     && pip install uv \
     # Remove ubi-9 python garbage
     && rm -f /usr/local/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl
@@ -99,7 +100,9 @@ WORKDIR /opt/app
 # =========
 
 # Verify installation.
-RUN uv --version
+RUN uv --version \
+    && protoc --version \
+    && uv pip show protobuf
 
 # dump a Python traceback to standard error (stderr) when a fatal crash occurs, such as a segmentation fault (segfault).
 ENV PYTHONFAULTHANDLER=1
