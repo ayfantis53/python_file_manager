@@ -57,7 +57,7 @@ def file_retention_management(index: int, conf_vars: dict, year: int) -> None:
                 try:
                     os.remove(m_file)
                     conf_vars.logger.info(
-                        "File [\"%s\"] deleted because it was outdated",
+                        'File ["%s"] deleted because it was outdated',
                         m_file,
                     )
                 # -- Handles access/manipulating file that does not exist at path --.
@@ -65,14 +65,16 @@ def file_retention_management(index: int, conf_vars: dict, year: int) -> None:
                     conf_vars.logger.error("File Not found %s.", err)
                 # -- Handles performing an operation on file without access privileges --.
                 except PermissionError:
-                    conf_vars.logger.error("Do NOT have permission to delete this file.")
+                    conf_vars.logger.error(
+                        "Do NOT have permission to delete this file."
+                    )
                 # -- Handles system-related, i.e. Input/Output, missing file, or network/permission error --.
                 except OSError as err:
                     conf_vars.logger.error("A different OS error occurred: %s.", err)
     # File does NOT exist.
     else:
         conf_vars.logger.error(
-            'File Manager could not find Directory: \"%s\"',
+            'File Manager could not find Directory: "%s"',
             data_dir,
         )
 
@@ -117,7 +119,7 @@ def file_copied_management(
         if not os.path.exists(dest_dir):
             os.makedirs(dest_dir)
             conf_vars.logger.error(
-                "Destination Directory \"%s\" did NOT exist and was created",
+                'Destination Directory "%s" did NOT exist and was created',
                 dest_dir,
             )
 
@@ -134,8 +136,8 @@ def file_copied_management(
                     try:
                         shutil.copy(t_file, dest_dir)
                         conf_vars.logger.debug(
-                            'File: \"%s\" copied to \"%s\"',
-                            t_file, 
+                            'File: "%s" copied to "%s"',
+                            t_file,
                             dest_dir,
                         )
                         copied = True
@@ -146,20 +148,20 @@ def file_copied_management(
                 else:
                     # Return 0 for failed.
                     conf_vars.logger.debug(
-                        'Permission Denied to read File: \"%s\"',
+                        'Permission Denied to read File: "%s"',
                         t_file,
                     )
                     return [last_time, 0]
     # Folder does NOT exist.
     else:
         # Return 0 for failed.
-        conf_vars.logger.error('Data Directory \"%s\" does NOT Exist', data_dir)
+        conf_vars.logger.error('Data Directory "%s" does NOT Exist', data_dir)
         return [last_time, 0]
 
     # Files were not copied.
     if not copied:
         # Return 1 for Degraded.
-        conf_vars.logger.warning('No New Files to Copy in \"%s\"', data_dir)
+        conf_vars.logger.warning('No New Files to Copy in "%s"', data_dir)
         return [datetime.datetime.now(), 1]
 
     # Set the new previous time to compare to in next run return 2 for Nominal.
@@ -232,7 +234,7 @@ def thread_daemon(conf_vars: FileManagerInit, comms: Communications) -> None:
             if not comms.ran_once:
                 # Not Primary so it will check every 10 seconds to see if it should run again.
                 conf_vars.logger.debug(
-                    'APP IS NOT PRIMARY, AND NOT RUNNING... Listening for [\"isprimary\"] message'
+                    'APP IS NOT PRIMARY, AND NOT RUNNING... Listening for ["isprimary"] message'
                 )
                 comms.ran_once = True
 

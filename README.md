@@ -1,4 +1,4 @@
-# File Manager Copy No Protobuf implementation (Linux)
+# File Manager Copy No Protobuf implementation
 -------------------------------------------------------------------------
 
 ## Overview

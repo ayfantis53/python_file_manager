@@ -26,7 +26,7 @@ class Communications:
 
     def rec_proto(self, conf_vars) -> None:
         """Connect to Socket and Receive Protobuf Message.
-        
+
         Args:
             conf_vars (dict): Data from config file.
         """
@@ -48,7 +48,11 @@ class Communications:
                 # Wait for incoming connection, when connected, return new socket object.
                 communication_socket, address = client.accept()
                 client_ip, client_port = address
-                conf_vars.logger.info("Listening on port: %s on %s port", client_ip, client_port)
+                conf_vars.logger.info(
+                    "Listening on port: %s on %s port",
+                    client_ip,
+                    client_port,
+                )
 
                 # Receive primary message from Application and deserialize.
                 message_isPrimary = communication_socket.recv(1024).decode("utf-8")
@@ -73,7 +77,11 @@ class Communications:
                 self.mutex.release()
 
             # terminates network connection & releases system resources allocated to that specific socket descriptor.
-            conf_vars.logger.info("Connection with %s on port %s closed", client_ip, client_port)
+            conf_vars.logger.info(
+                "Connection with %s on port %s closed",
+                client_ip,
+                client_port,
+            )
             communication_socket.close()
 
     def send_proto(self, b_status: list[bool], conf_vars: dict) -> None:
