@@ -47,14 +47,14 @@ uv run src/utils/server.py  ||  python -m  uv run src/utils/server.py
 ```bash
 # Run in 2nd terminal.
 
-# Run all tests:
-uv run pytest ||  make test
+# Run all tests:                                            (Windows)
+uv run pytest ||  make test                             ||  python -m  uv run pytest
 
 # Run single test file:
-uv run pytest tests/test_file_manager.py
+uv run pytest tests/test_file_manager.py                ||  python -m  uv run pytest tests/test_file_manager.py 
 
 # Run single test suite:
-uv run pytest tests/test_file_manager.py::TestJSON
+uv run pytest tests/test_file_manager.py::TestJSON      ||  python -m  uv run src/utils/server.py
 
 # Run single test:
 uv run pytest tests/test_file_manager.py::TestJSON::test_json_SUCCESS
@@ -67,10 +67,10 @@ uv run pytest tests/test_file_manager.py::TestJSON::test_json_SUCCESS
 
 ```bash
 # Run in 1st terminal.
-uv run src/utils/server.py
+uv run src/utils/server.py     ||  python -m  uv run src/utils/server.py
 
 # Run in 2nd terminal.
-uv run  src/file_manager.py
+uv run src/file_manager.py     ||  python -m  uv run src/file_manager.py 
 ```
 
 ### Running App with Docker

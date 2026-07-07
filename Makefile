@@ -13,9 +13,12 @@
 
 TAG?="local-build"
 
+# --- Setup OS ---
+
 # If Windows need python -m prefix.
 ifeq ($(OS), Windows_NT)
     OS_PRE = python -m 
+# If Linux not needed.
 else
 	OS_PRE?=""
 endif

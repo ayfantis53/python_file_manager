@@ -205,7 +205,7 @@ def thread_daemon(vars: FileManagerInit, comms: Communications) -> None:
             + "----------------------------------------------------------------"
         )
 
-        if is_primary:
+        if comms.is_primary:
             # Find out if all directories are red.
             for path in range(len(vars.paths)):
                 if b_status[path] == vars.red and not status_good:
@@ -269,8 +269,7 @@ def main():
     # ================
 
     # APP message will say if it is primary and this value will be updated.
-    global is_primary
-    is_primary = True
+    comms.is_primary = True
 
     # ================
     # Manage Threads.

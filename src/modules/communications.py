@@ -9,7 +9,8 @@ class Communications:
     """Handles recieving and sending messages using ports.
 
     Attributes:
-        mutex (Lock) synchronization primitive object designed to handle mutual exclusion.
+        mutex (Lock)       synchronization primitive object designed to handle mutual exclusion.
+        is_primary (bool): Tells us if we should be sending messaged or not.
     """
 
     def __init__(self, mutex: Lock) -> None:
@@ -19,6 +20,7 @@ class Communications:
             mutex (Lock) synchronization primitive object designed to handle mutual exclusion.
         """
         self.mutex = mutex
+        self.is_primary = True
 
     def rec_proto(self, vars) -> None:
         """Connect to Socket and Receive Protobuf Message."""
@@ -29,9 +31,6 @@ class Communications:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TODO: Delete
         client.bind((vars.HOST, 8089))  # TODO: Delete
         client.listen()  # TODO: Delete
-
-        # Are we primary? If not we dont run copy.
-        global is_primary  # TODO: GLobal variables need to be fixed after classes have been broken out.
 
         # Control flow statement used to create an infinite loop.
         while True:
@@ -47,12 +46,13 @@ class Communications:
                 # Receive primary message from Application and deserialize.
                 message_isPrimary = communication_socket.recv(1024).decode("utf-8")
 
+                # Are we primary? If not we dont run copy.
                 # Is primary.
                 if message_isPrimary == "isprimary":
-                    is_primary = True
+                    self.is_primary = True
                 # Is NOT primary.
                 else:
-                    is_primary = False
+                    self.is_primary = False
             # -- Handles remote server or peer forcefully close on an active network connection unexpectedly --.
             except ConnectionResetError:
                 print("Client closed the connection unexpectedly.")
