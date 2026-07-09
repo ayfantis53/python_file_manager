@@ -35,7 +35,7 @@ def file_retention_management(index: int, conf_vars: dict, year: int) -> None:
         data_dir = str(data_dir) + "_" + str(year)
 
     # File exists and that it wasnt previously copied in the last run.
-    if Path(data_dir).exists():
+    if Path(data_dir).is_dir():
         leniency_time = conf_vars.paths[index].get("LENIENCY")
 
         # turning leniency time in minutes to a datetime format to be compared.
@@ -70,7 +70,7 @@ def file_retention_management(index: int, conf_vars: dict, year: int) -> None:
     # File does NOT exist.
     else:
         conf_vars.logger.error(
-            'File Manager could not find Directory: "%s"',
+            'File Manager could not find Directory: "%s" for file retention.',
             data_dir,
         )
 
@@ -94,8 +94,8 @@ def file_copied_management(
             returns the current local date and time as a datetime object.
             returns exit code.
     """
-    dest_dir = conf_vars.paths[index].get(conf_vars.dest_dir)
     data_dir = conf_vars.paths[index].get(conf_vars.message_dir)
+    dest_dir = conf_vars.paths[index].get(conf_vars.dest_dir)
 
     # Add _year to directory if needed based on config.
     if conf_vars.paths[index].get(conf_vars.year):
@@ -106,11 +106,11 @@ def file_copied_management(
     copied = False
 
     # make sure files exists and that it wasnt previously copied in the last run.
-    if Path(data_dir).exists:
+    if Path(data_dir).is_dir():
         # Destination does NOT exists for output directory so create it.
-        if not Path(dest_dir).exists:
-            dest_dir.mkdir(parents=True, exist_ok=True)
-            conf_vars.logger.error(
+        if not Path(dest_dir).is_dir():
+            Path(dest_dir).mkdir(parents=True, exist_ok=True)
+            conf_vars.logger.info(
                 'Destination Directory "%s" did NOT exist and was created',
                 dest_dir,
             )
@@ -127,7 +127,7 @@ def file_copied_management(
                     # Try and copy the file since it passed all checks.
                     try:
                         shutil.copy(t_file, dest_dir)
-                        conf_vars.logger.debug(
+                        conf_vars.logger.info(
                             'File: "%s" copied to "%s"',
                             t_file,
                             dest_dir,
@@ -147,13 +147,13 @@ def file_copied_management(
     # Folder does NOT exist.
     else:
         # Return 0 for failed.
-        conf_vars.logger.error('Data Directory "%s" does NOT Exist', data_dir)
+        conf_vars.logger.error('Data Directory "%s" does NOT Exist, Could NOT copy files.', data_dir)
         return [last_time, 0]
 
     # Files were not copied.
     if not copied:
         # Return 1 for Degraded.
-        conf_vars.logger.warning('No New Files to Copy in "%s"', data_dir)
+        conf_vars.logger.info('No New Files to Copy in "%s"', data_dir)
         return [datetime.datetime.now(), 1]
 
     # Set the new previous time to compare to in next run return 2 for Nominal.
@@ -211,7 +211,7 @@ def thread_daemon(conf_vars: FileManagerInit, comms: Communications) -> None:
                         current_time.year,
                     )
 
-                # Send message to HSD.
+                # Send message to Client.
                 comms.send_proto(b_status, conf_vars)
 
                 # Time to wait until the next loop iteration.
@@ -297,6 +297,7 @@ def main():
             time.sleep(0.1)
     # -- Handles when a user manually interrupts a running script --.
     except KeyboardInterrupt:
+        file_manage_init.logger.info("KeyboardInterrupt, File Manager closing.")
         print("KeyboardInterrupt")
         sys.exit(1)
 

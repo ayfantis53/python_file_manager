@@ -91,7 +91,7 @@ class Communications:
             b_status (list[bool]): List of the health of all files.
             conf_vars (dict):      Data from config file.
         """
-        conf_vars.logger.info("Connected to port %d", conf_vars.port)
+        conf_vars.logger.debug("Connected to port %d", conf_vars.port)
 
         # Initialize Health message.
         state = conf_vars.green

@@ -1,4 +1,4 @@
-"""Imitates HSD Sending message."""
+"""Imitates Client Sending message."""
 
 # Standard lib imports
 import socket

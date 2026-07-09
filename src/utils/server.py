@@ -32,5 +32,5 @@ while True:
     print(f"Message from client is {message}")
 
     # Converts the string into a bytes object & transmits it over the network via a socket connection.
-    communication_socket.send("HSD Got your message! Thank you".encode("utf-8"))
+    communication_socket.send("Server Got your message! Thank you".encode("utf-8"))
     print(f"Communication with {address} ended!")

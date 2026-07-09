@@ -3,7 +3,7 @@ name = "file-manager"
 version = "0.1.0"
 description = "A project Managing files."
 readme = "README.md"
-authors = [{ name = "SciTec, Inc.", email = "a.y@gmail.com" }]
+authors = [{ name = "ayfantis53, Inc.", email = "andrew.yfantis@gmail.com" }]
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
