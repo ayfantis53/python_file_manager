@@ -7,17 +7,12 @@ import os
 import shutil
 import sys
 import time
-from threading import Thread, Lock
+from threading import Thread
 
 # Local imports
 from modules.communications import Communications
 from modules.file_manage_init import FileManagerInit
 from modules.parse_args import parse_args
-
-
-# initializes a mutual exclusion lock (mutex),
-# from the threading module to prevent multiple threads from accessing a shared resource at the same time.
-mutex = Lock()
 
 
 def file_retention_management(index: int, conf_vars: dict, year: int) -> None:
@@ -264,7 +259,7 @@ def main():
     # ================
 
     # Modules.
-    comms = Communications(mutex)
+    comms = Communications()
     file_manage_init = FileManagerInit(json_file_path)
 
     # ================

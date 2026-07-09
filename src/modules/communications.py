@@ -9,20 +9,18 @@ class Communications:
     """Handles recieving and sending messages using ports.
 
     Attributes:
-        mutex (Lock)       synchronization primitive object designed to handle mutual exclusion.
         is_primary (bool): Tells us if we should be sending messaged or not.
         ran_once (bool):   Tells us if we should print a not running message again.
+        mutex (Lock)       synchronization primitive object designed to handle mutual exclusion.
     """
 
-    def __init__(self, mutex: Lock) -> None:
-        """Class that initializes variables for file manager to run.
-
-        Args:
-            mutex (Lock) synchronization primitive object designed to handle mutual exclusion.
-        """
-        self.mutex = mutex
+    def __init__(self) -> None:
+        """Class that initializes variables for file manager to run."""
         self.is_primary = True
         self.ran_once = False
+        # initializes a mutual exclusion lock (mutex),
+        # from the threading module to prevent multiple threads from accessing a shared resource at the same time.
+        self.mutex = Lock()
 
     def rec_proto(self, conf_vars) -> None:
         """Connect to Socket and Receive Protobuf Message.
