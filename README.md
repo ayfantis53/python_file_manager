@@ -23,16 +23,17 @@ pip install ruff
 ### Ruff Linting
 ```bash
 # To Check for Errors: Use the ruff check command.
-ruff check . ||  make check
+# (Linux)              (Windows)
+ruff check .       ||  python -m ruff check .        ||  make check
 
 # To Automatically Fix Errors:
-ruff check --fix . ||  make fix
+ruff check --fix . ||   python -m ruff check --fix . ||  make fix
 
 # To Format Code:
-ruff format . ||  make format
+ruff format .      ||   python -m ruff format .      ||  make format
 
 # To ensure Ruff is reading the correct file and see exactly what settings are being applied:
-ruff config
+ruff config        ||   python -m ruff config 
 ```
 
 
@@ -41,20 +42,20 @@ ruff config
 
 ```bash
 # Run in 1st terminal.          (Windows)
-uv run src/utils/server.py  ||  python -m  uv run src/utils/server.py
+uv run src/utils/server.py  ||  python -m  uv run src/utils/server.py   ||  make server
 ```
 
 ```bash
 # Run in 2nd terminal.
 
 # Run all tests:                                            (Windows)
-uv run pytest ||  make test                             ||  python -m  uv run pytest
+uv run pytest                                       ||  python -m uv run pytest         ||      make test 
 
 # Run single test file:
-uv run pytest tests/test_file_manager.py                ||  python -m  uv run pytest tests/test_file_manager.py 
+uv run pytest tests/test_file_manager.py            ||  python -m uv run pytest tests/test_file_manager.py 
 
 # Run single test suite:
-uv run pytest tests/test_file_manager.py::TestJSON      ||  python -m  uv run src/utils/server.py
+uv run pytest tests/test_file_manager.py::TestJSON  ||  python -m uv run src/utils/server.py
 
 # Run single test:
 uv run pytest tests/test_file_manager.py::TestJSON::test_json_SUCCESS
@@ -79,7 +80,7 @@ make test
 # Run in 1st terminal.             (Windows)
 uv run src/utils/server.py     ||  python -m  uv run src/utils/server.py    || make server
 
-# Run in 2nd terminal.                                                                          (If using Protobuf)
+# Run in 2nd terminal.                                                      (If using Ports)  (If using Protobufs)
 uv run src/file_manager.py     ||  python -m  uv run src/file_manager.py    || make app     ||  make app COMM=PROTO
 
 # Run in 3rd terminal change "isprimary".
@@ -93,7 +94,7 @@ uv run src/utils/client.py     ||  python -m  uv run src/utils/client.py    || m
 docker build -f docker/Dockerfile -t file_manager:local-build . ||  make build
 
 # Run container from image.
-docker run --rm -it --entrypoint=bash file_manager:local-build ||  make run
+docker run --rm -it --entrypoint=bash file_manager:local-build  ||  make run
 ```
 
 ## Cleanup
