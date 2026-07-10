@@ -22,8 +22,9 @@ pip install ruff
 
 ### Ruff Linting
 ```bash
+# (Linux)               (Windows)                       make
+# --------------------------------------------------------------------
 # To Check for Errors: Use the ruff check command.
-# (Linux)              (Windows)
 ruff check .       ||  python -m ruff check .        ||  make check
 
 # To Automatically Fix Errors:
@@ -41,14 +42,18 @@ ruff config        ||   python -m ruff config
 > When Running test copy and test retention testing suites look in `tests/test-data` for results.
 
 ```bash
-# Run in 1st terminal.          (Windows)
+# (Linux)                       (Windows)                                 (make)
+# -----------------------------------------------------------------------------------
+# Run in 1st terminal.
 uv run src/utils/server.py  ||  python -m  uv run src/utils/server.py   ||  make server
 ```
 
 ```bash
+# (Linux)                                               (Windows)                            (make)
+# ------------------------------------------------------------------------------------------------------------
 # Run in 2nd terminal.
 
-# Run all tests:                                            (Windows)
+# Run all tests:
 uv run pytest                                       ||  python -m uv run pytest         ||      make test 
 
 # Run single test file:
@@ -77,6 +82,8 @@ make test
 
 > Now we can run our actual app
 ```bash
+# (Linux)                           (Windows)                                 (make)
+# -------------------------------------------------------------------------------------------
 # Run in 1st terminal.             (Windows)
 uv run src/utils/server.py     ||  python -m  uv run src/utils/server.py    || make server
 

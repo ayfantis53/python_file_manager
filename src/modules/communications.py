@@ -28,7 +28,6 @@ class Communications:
         Args:
             conf_vars (dict): Data from config file.
         """
-
         # Initialize new network socket object using IPv4 address family & TCP transport protocol.
         # Attach a client socket to a specific local IP address and port.
         # Put socket into a passive state, signal the operating system kernel to queue incoming connection requests.

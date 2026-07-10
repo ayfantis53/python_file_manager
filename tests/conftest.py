@@ -121,7 +121,7 @@ def test_file_copied_management(
     Args:
         data_dir (str):             Directory where files will be copied fromto be tested against.
         dir (str):                  Directory where files will be copied from to be tested.
-        last_time (int):
+        last_time (int):            Time of last file copied over.
         index (int):                Data_path index whether it be data_first or data_second.
         year (int):                 Current year.
         file_manager_init (object): Class to setup file_manager.
