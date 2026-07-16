@@ -11,7 +11,7 @@ import pytest
 
 # Local imports
 from src.file_manager import file_copied_management
-from src.modules.file_manage_init import FileManagerInit
+from src.modules.file_manager_init import FileManagerInit
 
 
 # ================

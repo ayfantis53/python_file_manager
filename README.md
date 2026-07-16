@@ -96,6 +96,7 @@ uv run src/utils/client.py     ||  python -m  uv run src/utils/client.py    || m
 
 ### Running App with Docker
 
+> Get image ready.
 ```bash
 # Build container from image.
 docker build -f docker/Dockerfile -t file_manager:local-build . ||  make build
@@ -103,6 +104,25 @@ docker build -f docker/Dockerfile -t file_manager:local-build . ||  make build
 # Run container from image.
 docker run --rm -it --entrypoint=bash file_manager:local-build  ||  make run
 ```
+
+> Run app from image
+```bash
+# Find running container (use after docker run or make run command).
+docker ps -a
+
+# Open 2 new terminals.
+# Enter running container through both terminals
+docker exec -it $CONTAINER_ID bash
+
+# Run each command in seperate terminals execd into running container.
+make server
+
+make test
+make app
+
+make client PRIM=True   ||  make client PRIM=False
+```
+
 
 ## Cleanup
 
@@ -112,4 +132,7 @@ make clean
 
 # Get rid of built docker image
 make clean-docker
+
+# Gets rid of all directories made by python or uv & built docker image.
+make clean-all
 ```

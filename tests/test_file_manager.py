@@ -11,7 +11,7 @@ import pytest
 sys.path.append("..")
 
 from src.file_manager import file_retention_management
-from src.modules.file_manage_init import FileManagerInit
+from src.modules.file_manager_init import FileManagerInit
 
 
 # ================

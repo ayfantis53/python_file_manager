@@ -11,7 +11,7 @@ from threading import Thread
 
 # Local imports
 from modules.communications import Communications
-from modules.file_manage_init import FileManagerInit
+from modules.file_manager_init import FileManagerInit
 from modules.parse_args import parse_args
 
 
@@ -260,18 +260,18 @@ def main():
 
     # Modules.
     comms = Communications()
-    file_manage_init = FileManagerInit(json_file_path)
+    file_manager_init = FileManagerInit(json_file_path)
 
     # ================
     # Manage Threads.
     # ================
 
     # Create threads to be ran concurrently.
-    t1 = Thread(target=comms.rec_proto, args=(file_manage_init,))
+    t1 = Thread(target=comms.rec_proto, args=(file_manager_init,))
     t2 = Thread(
         target=thread_daemon,
         args=(
-            file_manage_init,
+            file_manager_init,
             comms,
         ),
     )
@@ -295,7 +295,7 @@ def main():
             time.sleep(0.1)
     # -- Handles when a user manually interrupts a running script --.
     except KeyboardInterrupt:
-        file_manage_init.logger.info("KeyboardInterrupt, File Manager closing.")
+        file_manager_init.logger.info("KeyboardInterrupt: File Manager closing.")
         print("KeyboardInterrupt")
         sys.exit(1)
 
