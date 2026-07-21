@@ -164,7 +164,7 @@ def test_data_create(data_dir: str, max: int) -> None:
 
     Args:
         dir (str): Path to data directory.
-        max (int): Number of test files to make in the directory
+        max (int): Number of test files to make in the directory.
     """
     # Create the directory and any missing parent directories.
     Path(data_dir).mkdir(parents=True, exist_ok=True)

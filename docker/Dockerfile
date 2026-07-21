@@ -76,7 +76,7 @@ RUN dnf install -v --setopt=install_weak_deps=False -y --nogpgcheck \
 # Install uv.
 RUN pip install --upgrade pip && pip install protobuf \
     && pip install uv \
-    # Remove ubi-9 python garbage
+    # Remove ubi-9 python garbage.
     && rm -f /usr/local/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl
 
 

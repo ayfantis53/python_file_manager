@@ -17,7 +17,7 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
     # object serves as foundation for building a command-line interface (CLI) for script.
     parser = argparse.ArgumentParser()
 
-    # define the --comms command-line arguments script can accept.
+    # define the -c/--comms command-line arguments script can accept.
     parser.add_argument(
         "-c",
         "--comms",
@@ -27,8 +27,9 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
         help="Determines the communication type. Default is PORT",
     )
 
-    # define the --log-file command-line arguments script can accept.
+    # define the -j/--json-file command-line arguments script can accept.
     parser.add_argument(
+        "-j",
         "--json-file",
         type=str,
         default="./conf/file_manager.conf",

@@ -4,7 +4,7 @@
 ## Overview
 
 - App copies files from a data directory to a destination directory.
-- Checks if files are out of date in data directory and deletes them if they don't.
+- Checks if files are out-of-date in data directory and deletes them if they don't.
 
 
 ## Setup
@@ -115,12 +115,12 @@ docker ps -a
 docker exec -it $CONTAINER_ID bash
 
 # Run each command in seperate terminals execd into running container.
-make server
+make server                                         # terminal 1
 
-make test
+make test                                           # terminal 2
 make app
 
-make client PRIM=True   ||  make client PRIM=False
+make client PRIM=True   ||  make client PRIM=False  # terminal 3
 ```
 
 
