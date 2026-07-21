@@ -2,13 +2,10 @@
 
 # Standard Library imports
 from datetime import datetime
-import sys
 import unittest
 
 # Third-party imports
 import pytest
-
-sys.path.append("..")
 
 # Local imports
 from src.file_manager import file_retention_management

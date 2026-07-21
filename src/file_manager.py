@@ -123,7 +123,7 @@ def file_copied_management(
                     try:
                         shutil.copy(t_file, dest_dir)
                         conf_vars.logger.info(
-                            'File: "%s" copied to "%s"',
+                            'File: ["%s"] copied to Directory ["%s"]',
                             t_file,
                             dest_dir,
                         )
@@ -135,7 +135,7 @@ def file_copied_management(
                 else:
                     # Return 0 for failed.
                     conf_vars.logger.debug(
-                        'Permission Denied to read File: "%s"',
+                        'Permission Denied to read File: ["%s"]',
                         t_file,
                     )
                     return [last_time, 0]
@@ -151,7 +151,7 @@ def file_copied_management(
     # Files were not copied.
     if not copied:
         # Return 1 for Degraded.
-        conf_vars.logger.info('No New Files to Copy in "%s"', data_dir)
+        conf_vars.logger.info('No New Files to Copy in Directory ["%s"]', data_dir)
         return [datetime.datetime.now(), 1]
 
     # Set the new previous time to compare to in next run return 2 for Nominal.
